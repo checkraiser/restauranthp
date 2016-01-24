@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  loai_mat_hang: MyString
+  so_luong: 1
+  don_gia: 1
+  tong_tien: 1
+  ghi_chu: MyText
+
+two:
+  loai_mat_hang: MyString
+  so_luong: 1
+  don_gia: 1
+  tong_tien: 1
+  ghi_chu: MyText

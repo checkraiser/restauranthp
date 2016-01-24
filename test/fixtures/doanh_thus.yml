@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ban: 1
+  khoan_muc_thu: MyString
+  so_luong: 1
+  don_gia: 1
+  thanh_tien: 1
+
+two:
+  ban: 1
+  khoan_muc_thu: MyString
+  so_luong: 1
+  don_gia: 1
+  thanh_tien: 1
