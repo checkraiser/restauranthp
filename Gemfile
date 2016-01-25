@@ -47,4 +47,5 @@ end
 
 gem 'react-rails', '~> 1.5.0'
 gem 'rails_12factor'
+gem 'pusher'
 

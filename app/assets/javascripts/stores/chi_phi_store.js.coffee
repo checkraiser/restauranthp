@@ -8,21 +8,32 @@ class ChiPhiStore
         getChiPhis: @getChiPhis  
       }
     )
+    
+
 
   onInitData: (props)->
     @chi_phis = props.chi_phis
 
-  onSubmitChiPhi: (params)->
-    console.log(params)
+  onReloadData: ()->
+    $.ajax
+      type: 'GET'
+      url: '/chi_phis'
+      dataType: 'json'
+      success: (response)=>
+        @chi_phis = response.chi_phis
+        @emitChange()
+        
+      error: (response)=>
+        console.log('error')
+        console.log('response')
+
+  onSubmitChiPhi: (data)->
+    console.log(JSON.stringify(data))
     $.ajax
       type: 'POST'
       url: '/chi_phis'
-      data:
-        chi_phi:
-          khoan_muc_chi: params.khoan_muc_chi
-          so_luong: params.so_luong
-          don_gia: params.don_gia
-          ghi_chu: params.ghi_chu
+      dataType: 'json'
+      data: data
       success: (response)=>
         @chi_phis.push(response)
         @emitChange()
