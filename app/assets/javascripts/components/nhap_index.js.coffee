@@ -2,14 +2,17 @@
 
 Typeahead = React.createFactory ReactTypeahead.Typeahead
 
-ChiPhiForm = React.createFactory React.createClass
+NhapForm = React.createFactory React.createClass
   getInitialState: ->
-    khoan_muc_chi: ''
+    loai_mat_hang: ''
     so_luong: 0
     don_gia: 0
 
   resetState: ->
-    @setState(khoan_muc_chi: '', so_luong: '', don_gia: '')
+    @setState(loai_mat_hang: '', so_luong: '', don_gia: '')
+
+  onChangeKhoanMucChi: (e)->
+    @setState(loai_mat_hang: e.target.value)
 
   onChangeSoLuong: (e)->
     @setState(so_luong: e.target.value)
@@ -19,8 +22,8 @@ ChiPhiForm = React.createFactory React.createClass
 
   onSubmit: ()->
     data =
-      chi_phi: 
-        khoan_muc_chi: this.refs.khoan_muc_chi.state.entryValue
+      nhap: 
+        loai_mat_hang: this.refs.loai_mat_hang.state.entryValue
         so_luong: this.refs.so_luong.value
         don_gia: this.refs.don_gia.value
     ChiPhiActions.submitChiPhi data
@@ -29,8 +32,8 @@ ChiPhiForm = React.createFactory React.createClass
   render: ->
     div className: 'row',
       div className: 'column',
-        Typeahead(options: @props.options, maxVisible:3, ref: 'khoan_muc_chi', placeholder: 'KMC')
-
+        Typeahead(options: @props.options, maxVisible:2, ref: 'loai_mat_hang', placeholder: 'LMH')
+        
       div className: 'column',
         input 
           type: 'text'
@@ -51,42 +54,42 @@ ChiPhiForm = React.createFactory React.createClass
         'Add'
 
 
-ChiPhiList = React.createFactory React.createClass
+NhapList = React.createFactory React.createClass
   render: ->
     table {},
       thead {},
         tr {},
           th {}, 'STT'
-          th {}, 'KMC'
+          th {}, 'LMH'
           th {}, 'SL'
           th {}, 'DG'
           th {}, 'TT'
       tbody {},
-        _.map @props.chi_phis, (chi_phi)=>
+        _.map @props.nhaps, (chi_phi)=>
           tr {key: chi_phi.id},
             td {}, chi_phi.id
-            td {}, chi_phi.khoan_muc_chi
+            td {}, chi_phi.loai_mat_hang
             td {}, chi_phi.so_luong
             td {}, chi_phi.don_gia
             td {}, chi_phi.thanh_tien
 
-window.ChiPhiIndex = React.createClass
+window.NhapIndex = React.createClass
   getInitialState: ->
-    chi_phis: []
+    nhaps: []
     options: []
 
   componentWillMount: ->
-    ChiPhiStore.listen(@onChange)
-    ChiPhiActions.initData(@props)
+    NhapStore.listen(@onChange)
+    NhapActions.initData(@props)
     pusher = new Pusher('6c57eb75f33d0b498bed', {
       encrypted: true
     });
-    channel = pusher.subscribe('chi_phi_channel');
-    channel.bind 'chi_phi_updated', (data)->
-      ChiPhiActions.reloadData()
+    channel = pusher.subscribe('nhap_channel');
+    channel.bind 'nhap_updated', (data)->
+      NhapActions.reloadData()
 
   componentWillUnmount: ->
-    ChiPhiStore.unlisten(@onChange)
+    NhapStore.unlisten(@onChange)
 
   onChange: (state)->
     @setState(state)
@@ -95,8 +98,8 @@ window.ChiPhiIndex = React.createClass
     div className: 'container',
       div className: 'row',
         div className: 'column',
-          h1 {}, 'Chi Phi'
-      ChiPhiForm(options: @state.options)
+          h1 {}, 'Nhap'
+      NhapForm(options: @state.options)
       div className: 'row',
-        ChiPhiList(chi_phis: @state.chi_phis)
+        NhapList(nhaps: @state.nhaps)
 

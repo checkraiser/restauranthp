@@ -1,17 +1,15 @@
 class ChiPhisController < ApplicationController
   def index
-  	@chi_phis = ChiPhi.all
+  	@chi_phis = ChiPhiView.all
   end
 
   def create
     @chi_phi = ChiPhi.new(chi_phi_params)
     if @chi_phi.save
-      Pusher.trigger('chi_phi_channel', 'chi_phi_updated', {
-        message: 'hello world'
-      })
+      RefreshMatviewJob.new.async.perform('chi_phi')
       render partial: 'chi_phis/chi_phi', locals: {chi_phi: @chi_phi} 
     else
-      render json: @todo.errors.to_json
+      render json: @chi_phi.errors.to_json
     end
   end
 

@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :chi_phis
-
+  resources :nhaps
+  resources :options, :only => :index
   root 'home#index'
 
   # The priority is based upon order of creation: first created -> highest priority.

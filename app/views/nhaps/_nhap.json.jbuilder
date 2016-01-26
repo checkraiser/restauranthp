@@ -1,0 +1,1 @@
+json.extract!(nhap, :id, :loai_mat_hang, :so_luong, :don_gia, :thanh_tien)

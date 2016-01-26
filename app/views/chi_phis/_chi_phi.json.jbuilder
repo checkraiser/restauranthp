@@ -1,1 +1,1 @@
-json.extract!(chi_phi, :id, :khoan_muc_chi, :so_luong, :don_gia, :thanh_tien, :ghi_chu)
+json.extract!(chi_phi, :id, :khoan_muc_chi, :so_luong, :don_gia, :thanh_tien)

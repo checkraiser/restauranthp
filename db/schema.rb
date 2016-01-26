@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160124110007) do
+ActiveRecord::Schema.define(version: 20160126084527) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,4 +46,35 @@ ActiveRecord::Schema.define(version: 20160124110007) do
     t.datetime "updated_at",    null: false
   end
 
+
+  create_view :nhap_views, materialized: true,  sql_definition: <<-SQL
+      SELECT nhaps.id,
+      nhaps.loai_mat_hang,
+      nhaps.don_gia,
+      nhaps.so_luong,
+      (nhaps.so_luong * nhaps.don_gia) AS thanh_tien
+     FROM nhaps
+    ORDER BY nhaps.created_at, nhaps.id;
+  SQL
+
+  create_view :chi_phi_views, materialized: true,  sql_definition: <<-SQL
+      SELECT chi_phis.id,
+      chi_phis.khoan_muc_chi,
+      chi_phis.don_gia,
+      chi_phis.so_luong,
+      (chi_phis.so_luong * chi_phis.don_gia) AS thanh_tien
+     FROM chi_phis
+    ORDER BY chi_phis.created_at, chi_phis.id;
+  SQL
+
+  create_view :doanh_thu_views, materialized: true,  sql_definition: <<-SQL
+      SELECT doanh_thus.id,
+      doanh_thus.ban,
+      doanh_thus.khoan_muc_thu,
+      doanh_thus.don_gia,
+      doanh_thus.so_luong,
+      (doanh_thus.so_luong * doanh_thus.don_gia) AS thanh_tien
+     FROM doanh_thus
+    ORDER BY doanh_thus.created_at, doanh_thus.id;
+  SQL
 end
