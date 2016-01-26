@@ -16,4 +16,5 @@
 //= require pusher
 //= require react
 //= require react_ujs
+//= require vendor/react-typeahead
 //= require components

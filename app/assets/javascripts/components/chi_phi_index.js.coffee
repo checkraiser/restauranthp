@@ -1,5 +1,7 @@
 { div, form, button, h1, ul, li, a, span, label, input, table, thead, tbody, tr, th, td } = React.DOM
 
+Typeahead = React.createFactory ReactTypeahead.Typeahead
+
 ChiPhiForm = React.createFactory React.createClass
   getInitialState: ->
     khoan_muc_chi: ''
@@ -30,6 +32,8 @@ ChiPhiForm = React.createFactory React.createClass
   render: ->
     div className: 'row',
       div className: 'column',
+        Typeahead(options:['John', 'Paul', 'George', 'Ringo'], maxVisible:2)
+
         input 
           type: 'text'
           ref: 'khoan_muc_chi',
@@ -65,6 +69,7 @@ ChiPhiList = React.createFactory React.createClass
           th {}, 'KMC'
           th {}, 'SL'
           th {}, 'DG'
+          th {}, 'TT'
       tbody {},
         _.map @props.chi_phis, (chi_phi)=>
           tr {key: chi_phi.id},
@@ -72,10 +77,12 @@ ChiPhiList = React.createFactory React.createClass
             td {}, chi_phi.khoan_muc_chi
             td {}, chi_phi.so_luong
             td {}, chi_phi.don_gia
+            td {}, chi_phi.thanh_tien
 
 window.ChiPhiIndex = React.createClass
   getInitialState: ->
     chi_phis: []
+    options: []
 
   componentWillMount: ->
     ChiPhiStore.listen(@onChange)

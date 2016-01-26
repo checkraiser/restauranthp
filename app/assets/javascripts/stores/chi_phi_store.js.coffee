@@ -3,16 +3,26 @@ class ChiPhiStore
   constructor: ->
     @bindActions(ChiPhiActions)
     @chi_phis = []
+    @options = []
     @exportPublicMethods(
       {
-        getChiPhis: @getChiPhis  
+        getChiPhis: @getChiPhis,
+        getOptions: @getOptions
       }
     )
     
-
-
   onInitData: (props)->
     @chi_phis = props.chi_phis
+    $.ajax
+      type: 'GET'
+      url: '/options?type=chi_phi'
+      dataType: 'json'
+      success: (response)=>
+        @options = response.options
+        @emitChange()
+      error: (response)=>
+        console.log('error')
+        console.log('response')
 
   onReloadData: ()->
     $.ajax
@@ -22,13 +32,22 @@ class ChiPhiStore
       success: (response)=>
         @chi_phis = response.chi_phis
         @emitChange()
-        
+      error: (response)=>
+        console.log('error')
+        console.log('response')
+
+    $.ajax
+      type: 'GET'
+      url: '/options?type=chi_phi'
+      dataType: 'json'
+      success: (response)=>
+        @options = response.options
+        @emitChange()
       error: (response)=>
         console.log('error')
         console.log('response')
 
   onSubmitChiPhi: (data)->
-    console.log(JSON.stringify(data))
     $.ajax
       type: 'POST'
       url: '/chi_phis'
@@ -44,5 +63,8 @@ class ChiPhiStore
 
   getChiPhis: ()->
     @getState().chi_phis
+
+  getOptions: ()->
+    @getState().options
 
 window.ChiPhiStore = alt.createStore(ChiPhiStore)
