@@ -53,9 +53,6 @@ class NhapStore
       url: '/nhaps'
       dataType: 'json'
       data: data
-      success: (response)=>
-        @nhaps.push(response)
-        @emitChange()
       error: (response)=>
         console.log('error')
         console.log(response)

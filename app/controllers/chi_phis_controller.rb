@@ -7,7 +7,7 @@ class ChiPhisController < ApplicationController
     @chi_phi = ChiPhi.new(chi_phi_params)
     if @chi_phi.save
       RefreshMatviewJob.new.async.perform('chi_phi')
-      render partial: 'chi_phis/chi_phi', locals: {chi_phi: @chi_phi} 
+      render json: {success: 'OK'}
     else
       render json: @chi_phi.errors.to_json
     end

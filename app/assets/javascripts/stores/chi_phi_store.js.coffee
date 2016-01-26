@@ -53,9 +53,6 @@ class ChiPhiStore
       url: '/chi_phis'
       dataType: 'json'
       data: data
-      success: (response)=>
-        @chi_phis.push(response)
-        @emitChange()
       error: (response)=>
         console.log('error')
         console.log(response)

@@ -11,9 +11,6 @@ NhapForm = React.createFactory React.createClass
   resetState: ->
     @setState(loai_mat_hang: '', so_luong: '', don_gia: '')
 
-  onChangeKhoanMucChi: (e)->
-    @setState(loai_mat_hang: e.target.value)
-
   onChangeSoLuong: (e)->
     @setState(so_luong: e.target.value)
 
@@ -26,7 +23,7 @@ NhapForm = React.createFactory React.createClass
         loai_mat_hang: this.refs.loai_mat_hang.state.entryValue
         so_luong: this.refs.so_luong.value
         don_gia: this.refs.don_gia.value
-    ChiPhiActions.submitChiPhi data
+    NhapActions.submitNhap data
     @resetState()
   
   render: ->
@@ -65,13 +62,13 @@ NhapList = React.createFactory React.createClass
           th {}, 'DG'
           th {}, 'TT'
       tbody {},
-        _.map @props.nhaps, (chi_phi)=>
-          tr {key: chi_phi.id},
-            td {}, chi_phi.id
-            td {}, chi_phi.loai_mat_hang
-            td {}, chi_phi.so_luong
-            td {}, chi_phi.don_gia
-            td {}, chi_phi.thanh_tien
+        _.map @props.nhaps, (nhap)=>
+          tr {key: nhap.id},
+            td {}, nhap.id
+            td {}, nhap.loai_mat_hang
+            td {}, nhap.so_luong
+            td {}, nhap.don_gia
+            td {}, nhap.thanh_tien
 
 window.NhapIndex = React.createClass
   getInitialState: ->

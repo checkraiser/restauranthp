@@ -6,8 +6,8 @@ class NhapsController < ApplicationController
   def create
     @nhap = Nhap.new(nhap_params)
     if @nhap.save
-      RefreshMatViewJob.perform_async('nhap')
-      render partial: 'nhaps/nhap', locals: {nhap: @nhap} 
+      RefreshMatviewJob.new.async.perform('nhap')
+      render json: {success: 'OK'}
     else
       render json: @nhap.errors.to_json
     end
