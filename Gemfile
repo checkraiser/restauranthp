@@ -35,6 +35,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+  gem "better_errors"
 end
 
 group :development do
@@ -49,6 +50,5 @@ gem 'react-rails', '~> 1.5.0'
 gem 'rails_12factor'
 gem 'pusher'
 gem 'puma'
-gem 'scenic'
-gem "better_errors"
+gem 'exceptiontrap'
 
