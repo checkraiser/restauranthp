@@ -27,11 +27,12 @@ ChiPhiForm = React.createFactory React.createClass
 
   
 
-  onSubmit: ()->
+  onSubmit: (e)->
+    e.preventDefault()
     data =
       chi_phi: 
-        tenhang: this.refs.tenhang.state.entryValue
-        donvitinh: this.refs.donvitinh.state.entryValue
+        tenhang: this.refs.tenhang.value
+        donvitinh: this.refs.donvitinh.value
         soluong: this.refs.soluong.value
         dongia: this.refs.dongia.value
         create_at: new Date()

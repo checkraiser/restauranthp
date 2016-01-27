@@ -3,7 +3,7 @@ class ChiPhisController < ApplicationController
   	@chi_phis = ChiPhi.all
     @options_tenhang = ChiPhi.pluck :tenhang
     @options_donvitinh = ChiPhi.pluck :donvitinh
-    @props = {chi_phis: {chi_phis: @chi_phis, options_tenhang: @options_tenhang, options_donvitinh: @options_donvitinh}}
+    @props = {chi_phis: {chi_phis: @chi_phis, options_tenhang: @options_tenhang.uniq, options_donvitinh: @options_donvitinh.uniq}}
   end
 
   def create
@@ -13,7 +13,7 @@ class ChiPhisController < ApplicationController
       #Pusher.trigger('chi_phi_channel', 'chi_phi_updated', {
       #  message: 'hello world'
       #})
-      render @chi_phi
+      render json: @chi_phi.to_json
     else
       render json: @chi_phi.errors.to_json
     end
