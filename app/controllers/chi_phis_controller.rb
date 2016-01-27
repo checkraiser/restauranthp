@@ -1,13 +1,18 @@
 class ChiPhisController < ApplicationController
   def index
-  	@chi_phis = ChiPhiView.all
+  	@chi_phis = ChiPhi.all
+    @options_tenhang = ChiPhi.pluck :tenhang
+    @options_donvitinh = ChiPhi.pluck :donvitinh
   end
 
   def create
     @chi_phi = ChiPhi.new(chi_phi_params)
     if @chi_phi.save
-      RefreshMatviewJob.new.async.perform('chi_phi')
-      render json: {success: 'OK'}
+      ChiPhiView.refresh
+      #Pusher.trigger('chi_phi_channel', 'chi_phi_updated', {
+      #  message: 'hello world'
+      #})
+      render @chi_phi
     else
       render json: @chi_phi.errors.to_json
     end
@@ -16,7 +21,7 @@ class ChiPhisController < ApplicationController
   private
   def chi_phi_params
   	params.require(:chi_phi).permit(
-  	   :khoan_muc_chi, :so_luong, :don_gia, :ghi_chu
+  	   :tenhang, :donvitinh, :soluong, :dongia, :create_at
   	)
   end
 end

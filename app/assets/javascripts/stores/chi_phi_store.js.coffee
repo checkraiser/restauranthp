@@ -3,26 +3,20 @@ class ChiPhiStore
   constructor: ->
     @bindActions(ChiPhiActions)
     @chi_phis = []
-    @options = []
+    @options_tenhang = []
+    @options_donvitinh = []
     @exportPublicMethods(
       {
         getChiPhis: @getChiPhis,
-        getOptions: @getOptions
+        getOptionsTenHang: @getOptionsTenHang,
+        getOptionsDonViTinh: @getOptionsDonViTinh
       }
     )
     
   onInitData: (props)->
-    @chi_phis = props.chi_phis
-    $.ajax
-      type: 'GET'
-      url: '/options?type=chi_phi'
-      dataType: 'json'
-      success: (response)=>
-        @options = response.options
-        @emitChange()
-      error: (response)=>
-        console.log('error')
-        console.log('response')
+    @chi_phis = props.chi_phis.chi_phis
+    @options_tenhang = props.chi_phis.options_tenhang
+    @options_donvitinh = props.chi_phis.options_donvitinh
 
   onReloadData: ()->
     $.ajax
@@ -30,18 +24,9 @@ class ChiPhiStore
       url: '/chi_phis'
       dataType: 'json'
       success: (response)=>
-        @chi_phis = response.chi_phis
-        @emitChange()
-      error: (response)=>
-        console.log('error')
-        console.log('response')
-
-    $.ajax
-      type: 'GET'
-      url: '/options?type=chi_phi'
-      dataType: 'json'
-      success: (response)=>
-        @options = response.options
+        @chi_phis = response.chi_phis.chi_phis
+        @options_tenhang = response.chi_phis.options_tenhang
+        @options_donvitinh = response.chi_phis.options_donvitinh
         @emitChange()
       error: (response)=>
         console.log('error')
@@ -53,6 +38,9 @@ class ChiPhiStore
       url: '/chi_phis'
       dataType: 'json'
       data: data
+      success: (response)=>
+        @chi_phis.push(response)
+        @emitChange()
       error: (response)=>
         console.log('error')
         console.log(response)
@@ -61,7 +49,10 @@ class ChiPhiStore
   getChiPhis: ()->
     @getState().chi_phis
 
-  getOptions: ()->
-    @getState().options
+  getOptionsTenHang: ()->
+    @getState().options_tenhang
+
+  getOptionsDonViTinh: ()->
+    @getState().options_donvitinh
 
 window.ChiPhiStore = alt.createStore(ChiPhiStore)

@@ -13,8 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require vendor/pusher
 //= require react
 //= require react_ujs
-//= require vendor/react-typeahead
+//= require vendor/pusher
+//= require vendor/typeahead
 //= require components

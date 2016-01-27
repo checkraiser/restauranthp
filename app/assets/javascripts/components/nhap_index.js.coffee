@@ -1,6 +1,6 @@
 { div, form, button, h1, ul, li, a, span, label, input, table, thead, tbody, tr, th, td } = React.DOM
 
-Typeahead = React.createFactory ReactTypeahead.Typeahead
+Typeahead = React.createFactory React.Typeahead
 
 NhapForm = React.createFactory React.createClass
   getInitialState: ->

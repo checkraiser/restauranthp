@@ -11,70 +11,87 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160126084527) do
+ActiveRecord::Schema.define(version: 20160126121245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "chi_phis", force: :cascade do |t|
-    t.string   "khoan_muc_chi"
-    t.integer  "so_luong"
-    t.integer  "don_gia"
-    t.integer  "thanh_tien"
-    t.text     "ghi_chu"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+  create_table "chiphi", force: :cascade do |t|
+    t.string   "tenhang",   limit: 100,                null: false
+    t.string   "donvitinh", limit: 50
+    t.decimal  "dongia",                precision: 38
+    t.integer  "soluong"
+    t.datetime "create_at"
+    t.datetime "update_at"
   end
 
-  create_table "doanh_thus", force: :cascade do |t|
-    t.integer  "ban"
-    t.string   "khoan_muc_thu"
-    t.integer  "so_luong"
-    t.integer  "don_gia"
-    t.integer  "thanh_tien"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+  create_table "doanhthu", id: false, force: :cascade do |t|
+    t.integer  "id",                                     default: "nextval('doanhthu_id_seq'::regclass)", null: false
+    t.string   "masoban",     limit: 50,                                                                  null: false
+    t.string   "khoanmucthu", limit: 100,                                                                 null: false
+    t.string   "donvitinh",   limit: 50
+    t.decimal  "dongia",                  precision: 38
+    t.integer  "soluong"
+    t.datetime "create_at",                                                                               null: false
+    t.datetime "update_at"
   end
 
-  create_table "nhaps", force: :cascade do |t|
-    t.string   "loai_mat_hang"
-    t.integer  "so_luong"
-    t.integer  "don_gia"
-    t.integer  "tong_tien"
-    t.text     "ghi_chu"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+  create_table "nhap", force: :cascade do |t|
+    t.string   "tenhang",   limit: 100,                null: false
+    t.string   "donvitinh", limit: 50
+    t.decimal  "dongia",                precision: 38
+    t.integer  "soluong"
+    t.datetime "create_at"
+    t.datetime "update_at"
   end
 
 
-  create_view :nhap_views, materialized: true,  sql_definition: <<-SQL
-      SELECT nhaps.id,
-      nhaps.loai_mat_hang,
-      nhaps.don_gia,
-      nhaps.so_luong,
-      (nhaps.so_luong * nhaps.don_gia) AS thanh_tien
-     FROM nhaps
-    ORDER BY nhaps.created_at, nhaps.id;
+  create_view :nhap_matview, materialized: true,  sql_definition: <<-SQL
+      SELECT s.ngaynhap,
+      sum(s.thanhtien) AS tiennhaptheongay
+     FROM ( SELECT nhap.id,
+              nhap.tenhang,
+              nhap.donvitinh,
+              nhap.dongia,
+              nhap.soluong,
+              ((nhap.soluong)::numeric * nhap.dongia) AS thanhtien,
+              date_trunc('day'::text, nhap.create_at) AS ngaynhap,
+              nhap.update_at
+             FROM nhap) s
+    GROUP BY s.ngaynhap
+    ORDER BY s.ngaynhap;
   SQL
 
-  create_view :chi_phi_views, materialized: true,  sql_definition: <<-SQL
-      SELECT chi_phis.id,
-      chi_phis.khoan_muc_chi,
-      chi_phis.don_gia,
-      chi_phis.so_luong,
-      (chi_phis.so_luong * chi_phis.don_gia) AS thanh_tien
-     FROM chi_phis
-    ORDER BY chi_phis.created_at, chi_phis.id;
+  create_view :chiphi_matview, materialized: true,  sql_definition: <<-SQL
+      SELECT s.ngaychiphi,
+      sum(s.thanhtien) AS tienchiphitheongay
+     FROM ( SELECT chiphi.id,
+              chiphi.tenhang,
+              chiphi.donvitinh,
+              chiphi.dongia,
+              chiphi.soluong,
+              ((chiphi.soluong)::numeric * chiphi.dongia) AS thanhtien,
+              date_trunc('day'::text, chiphi.create_at) AS ngaychiphi,
+              chiphi.update_at
+             FROM chiphi) s
+    GROUP BY s.ngaychiphi
+    ORDER BY s.ngaychiphi;
   SQL
 
-  create_view :doanh_thu_views, materialized: true,  sql_definition: <<-SQL
-      SELECT doanh_thus.id,
-      doanh_thus.ban,
-      doanh_thus.khoan_muc_thu,
-      doanh_thus.don_gia,
-      doanh_thus.so_luong,
-      (doanh_thus.so_luong * doanh_thus.don_gia) AS thanh_tien
-     FROM doanh_thus
-    ORDER BY doanh_thus.created_at, doanh_thus.id;
+  create_view :doanhthu_matview, materialized: true,  sql_definition: <<-SQL
+      SELECT s.ngaythu,
+      sum(s.thanhtien) AS tienthutheongay
+     FROM ( SELECT doanhthu.id,
+              doanhthu.masoban,
+              doanhthu.khoanmucthu,
+              doanhthu.donvitinh,
+              doanhthu.dongia,
+              doanhthu.soluong,
+              ((doanhthu.soluong)::numeric * doanhthu.dongia) AS thanhtien,
+              date_trunc('day'::text, doanhthu.create_at) AS ngaythu,
+              doanhthu.update_at
+             FROM doanhthu) s
+    GROUP BY s.ngaythu
+    ORDER BY s.ngaythu;
   SQL
 end

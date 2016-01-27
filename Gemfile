@@ -50,5 +50,4 @@ gem 'rails_12factor'
 gem 'pusher'
 gem 'puma'
 gem 'scenic'
-gem 'sucker_punch'
 

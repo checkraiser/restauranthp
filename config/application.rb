@@ -23,8 +23,8 @@ module Restaurant
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
     config.react.addons = true
-    config.active_job.queue_adapter = :sucker_punch
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
     config.autoload_paths += %W(#{config.root}/app)
+    config.active_record.schema_format = :sql
   end
 end

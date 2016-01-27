@@ -1,11 +1,11 @@
 class OptionsController < ApplicationController
   def index
     if params[:type] == 'chi_phi'
-  	  @options = ChiPhiView.pluck :khoan_muc_chi
+  	  @options = ChiPhi.pluck params[:column]
     elsif params[:type] == 'nhap'
-      @options = NhapView.pluck :loai_mat_hang
+      @options = Nhap.pluck params[:column]
     elsif params[:type] == 'doanh_thu'
-      @options = DoanhThuView.pluck :khoan_muc_thu
+      @options = DoanhThu.pluck params[:column]
     else
       @options = []
     end
