@@ -8,7 +8,25 @@ ChiPhiForm = React.createFactory React.createClass
     soluong: ''
     dongia: ''
 
-  
+  componentDidMount: ->
+    console.log @props.options_tenhang
+    $.typeahead
+      input: "#tenhang"
+      order: "asc"
+      source: 
+        data: @props.options_tenhang
+      callback:
+        onInit: (node)->
+          console.log('Typeahead Initiated on ' + node.selector)
+    
+    $.typeahead
+      input: "#donvitinh"
+      order: "asc"
+      source: 
+        data: @props.options_donvitinh
+      callback:
+        onInit: (node)->
+          console.log('Typeahead Initiated on ' + node.selector)  
 
   resetState: ->
     @setState(tenhang: '', donvitinh: '', dongia: '', soluong: '')
@@ -130,25 +148,7 @@ window.ChiPhiIndex = React.createClass
   componentWillUnmount: ->
     ChiPhiStore.unlisten(@onChange)
   
-  componentDidMount: ->
-    console.log @state.options_tenhang
-    $.typeahead
-      input: "#tenhang"
-      order: "asc"
-      source: 
-        data: @state.options_tenhang
-      callback:
-        onInit: (node)->
-          console.log('Typeahead Initiated on ' + node.selector)
-    
-    $.typeahead
-      input: "#donvitinh"
-      order: "asc"
-      source: 
-        data: @state.options_donvitinh
-      callback:
-        onInit: (node)->
-          console.log('Typeahead Initiated on ' + node.selector)
+  
 
   onChange: (state)->
     @setState(state)
@@ -158,7 +158,7 @@ window.ChiPhiIndex = React.createClass
       div className: 'row',
         div className: 'column',
           h1 {}, 'Chi Phi'
-      ChiPhiForm()
+      ChiPhiForm(options_tenhang: @state.options_tenhang, options_donvitinh: @state.options_donvitinh)
       div className: 'row',
         ChiPhiList(chi_phis: @state.chi_phis)
 
