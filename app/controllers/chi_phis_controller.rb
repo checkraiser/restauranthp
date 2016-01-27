@@ -3,6 +3,7 @@ class ChiPhisController < ApplicationController
   	@chi_phis = ChiPhi.all
     @options_tenhang = ChiPhi.pluck :tenhang
     @options_donvitinh = ChiPhi.pluck :donvitinh
+    @props = {chi_phis: {chi_phis: @chi_phis, options_tenhang: @options_tenhang, options_donvitinh: @options_donvitinh}}
   end
 
   def create
