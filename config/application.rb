@@ -26,5 +26,6 @@ module Restaurant
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
     config.autoload_paths += %W(#{config.root}/app)
     config.active_record.schema_format = :sql
+    config.react.server_renderer = React::ServerRendering::SprocketsRenderer
   end
 end

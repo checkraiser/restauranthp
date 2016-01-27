@@ -12,9 +12,20 @@ ChiPhiForm = React.createFactory React.createClass
     console.log @props.options_tenhang
     $.typeahead
       input: "#tenhang"
+      minLength: 0
+      maxItem: 15
       order: "asc"
+      hint: true
+      accent: true
+      searchOnFocus: true
+      backdrop: 
+        "background-color": "#3879d9",
+        "opacity": "0.1",
+        "filter": "alpha(opacity=10)"
       source: 
-        tenhang: ["/options.json?type=chi_phi&column=tenhang"]
+        data: []
+        url: "/options.json?type=chi_phi&column=tenhang"
+      debug: true
       callback:
         onInit: (node)->
           console.log('Typeahead Initiated on ' + node.selector)
@@ -24,9 +35,19 @@ ChiPhiForm = React.createFactory React.createClass
     
     $.typeahead
       input: "#donvitinh"
+      minLength: 0
+      maxItem: 15
       order: "asc"
+      hint: true
+      accent: true
+      searchOnFocus: true
+      backdrop: 
+        "background-color": "#3879d9",
+        "opacity": "0.1",
+        "filter": "alpha(opacity=10)"
       source: 
-        donvitinh: ["/options.json?type=chi_phi&column=donvitinh"]
+        data: []
+        url: "/options.json?type=chi_phi&column=donvitinh"
       callback:
         onInit: (node)->
           console.log('Typeahead Initiated on ' + node.selector)  
