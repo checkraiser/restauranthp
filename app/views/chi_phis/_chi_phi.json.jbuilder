@@ -1,1 +1,0 @@
-json.extract!(chi_phi, :id, :tenhang, :donvitinh, :soluong, :dongia)
