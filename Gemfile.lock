@@ -61,7 +61,6 @@ GEM
     connection_pool (2.2.0)
     debug_inspector (0.0.2)
     erubis (2.7.0)
-    exceptiontrap (1.0.11)
     execjs (2.6.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
@@ -174,7 +173,6 @@ DEPENDENCIES
   better_errors
   byebug
   coffee-rails (~> 4.1.0)
-  exceptiontrap
   jbuilder (~> 2.0)
   jquery-rails
   pg (~> 0.15)
