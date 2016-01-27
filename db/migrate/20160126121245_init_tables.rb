@@ -20,16 +20,14 @@ class InitTables < ActiveRecord::Migration
       update_at timestamp
     );
     CREATE TABLE DoanhThu (
-      Id SERIAL NOT NULL , 
+      Id SERIAL NOT NULL PRIMARY KEY, 
       Masoban  Varchar(50),
       Khoanmucthu Varchar(100),
       Donvitinh Varchar(50), 
       Dongia Numeric(38, 0), 
       Soluong Integer, 
       create_at timestamp, 
-      update_at timestamp,
-      PRIMARY KEY (Id,Masoban,Khoanmucthu,create_at)
-      
+      update_at timestamp
     );
     CREATE MATERIALIZED VIEW nhap_matview AS
       SELECT S.ngaynhap,SUM(S.ThanhTien) AS TienNhapTheoNgay

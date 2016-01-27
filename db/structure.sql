@@ -174,12 +174,12 @@ CREATE MATERIALIZED VIEW chiphi_matview AS
 
 CREATE TABLE doanhthu (
     id integer NOT NULL,
-    masoban character varying(50) NOT NULL,
-    khoanmucthu character varying(100) NOT NULL,
+    masoban character varying(50),
+    khoanmucthu character varying(100),
     donvitinh character varying(50),
     dongia numeric(38,0),
     soluong integer,
-    create_at timestamp without time zone NOT NULL,
+    create_at timestamp without time zone,
     update_at timestamp without time zone
 );
 
@@ -323,7 +323,7 @@ ALTER TABLE ONLY chiphi
 --
 
 ALTER TABLE ONLY doanhthu
-    ADD CONSTRAINT doanhthu_pkey PRIMARY KEY (id, masoban, khoanmucthu, create_at);
+    ADD CONSTRAINT doanhthu_pkey PRIMARY KEY (id);
 
 
 --

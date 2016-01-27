@@ -7,9 +7,26 @@ ChiPhiForm = React.createFactory React.createClass
     donvitinh: ''
     soluong: ''
     dongia: ''
+    timestamp: ''
+    options_tenhang: []
+    options_tenhang: []
 
   componentDidMount: ->
-    console.log @props.options_tenhang
+    $.ajax
+      type: 'GET'
+      url: '/options.json?type=chi_phi&column=tenhang'
+      success: (response)=>
+        @setState(options_tenhang: response.options)
+        @setTypeAheadTenhang()
+
+    $.ajax
+      type: 'GET'
+      url: '/options.json?type=chi_phi&column=donvitinh'
+      success: (response)=>
+        @setState(options_donvitinh: response.options)
+        @setTypeAheadDonViTinh
+
+  setTypeAheadTenhang: ->
     $.typeahead
       input: "#tenhang"
       minLength: 0
@@ -23,8 +40,7 @@ ChiPhiForm = React.createFactory React.createClass
         "opacity": "0.1",
         "filter": "alpha(opacity=10)"
       source: 
-        data: []
-        url: "/options.json?type=chi_phi&column=tenhang"
+        data: @state.options_tenhang
       debug: true
       callback:
         onInit: (node)->
@@ -32,7 +48,8 @@ ChiPhiForm = React.createFactory React.createClass
         onClick: (node, a, item, event)=>
           console.log item
           @setState(tenhang: item.display)
-    
+
+  setTypeAheadDonViTinh: ->
     $.typeahead
       input: "#donvitinh"
       minLength: 0
@@ -46,8 +63,7 @@ ChiPhiForm = React.createFactory React.createClass
         "opacity": "0.1",
         "filter": "alpha(opacity=10)"
       source: 
-        data: []
-        url: "/options.json?type=chi_phi&column=donvitinh"
+        data: @state.options_donvitinh
       callback:
         onInit: (node)->
           console.log('Typeahead Initiated on ' + node.selector)  
@@ -158,8 +174,6 @@ ChiPhiList = React.createFactory React.createClass
 window.ChiPhiIndex = React.createClass
   getInitialState: ->
     chi_phis: []
-    options_tenhang: []
-    options_donvitinh: []
 
   componentWillMount: ->
     ChiPhiStore.listen(@onChange)

@@ -52,3 +52,6 @@ gem 'rails_12factor'
 gem 'pusher'
 gem 'puma'
 gem 'scenic'
+gem 'gon'
+gem "chartkick"
+gem 'groupdate'

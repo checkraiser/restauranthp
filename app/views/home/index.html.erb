@@ -1,2 +1,50 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<p>Date : </p>
+ <input type="text" data-field="date" id='fromdate' readonly>
+ <input type="text" data-field="date" id='todate' readonly>
+  <div id="dtBox"></div>
+<div id="money"></div>
+
+<%= area_chart @chiphi_chart %>
+<script type="text/javascript">
+  $(document).ready(function()
+   {
+     $("#dtBox").DateTimePicker({
+     	dateFormat: "yyyy-MM-dd"
+     });
+     var today = new Date();
+     var year = today.getFullYear();
+     var month = today.getMonth()+1;
+     var day = today.getDate();
+     $('#fromdate').val(year + '-' + month + '-' + day);
+     $('#todate').val(year + '-' + month + '-' + day);
+   });
+  var doanhthu = gon.doanhthu;
+  var chiphi = gon.chiphi;
+  var nhap = gon.nhap;
+  var tongtien = function(){
+  	return doanhthu - chiphi - nhap;
+  }
+  $('#money').html(tongtien());
+  var reset = function(){
+  	var fromdate = $('#fromdate').val();
+  	var todate = $('#todate').val();
+  	$.ajax({
+	  	url: '/report.json?fromdate=' + fromdate + '&todate=' + todate,
+	  	success: function(response){
+	  		doanhthu = response.doanhthu;
+	  		chiphi = response.chiphi;
+	  		nhap = response.nhap;
+	  		$('#money').html(tongtien());
+	  	}
+	  })
+  }
+  $('input[id=fromdate]').change(function() { reset() });
+  $('input[id=todate]').change(function() { reset() });
+  var pusher = new Pusher('6c57eb75f33d0b498bed', {
+	  encrypted: true
+	});
+	var channel = pusher.subscribe('chi_phi_channel');
+	channel.bind('chi_phi_updated', function(data) {
+	  reset();
+	});
+</script>

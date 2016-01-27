@@ -17,4 +17,6 @@
 //= require react_ujs
 //= require vendor/pusher
 //= require vendor/typeahead
+//= require vendor/datetimepicker
+//= require vendor/chartkick
 //= require components

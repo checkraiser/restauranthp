@@ -15,9 +15,9 @@ class ChiPhisController < ApplicationController
     @chi_phi = ChiPhi.new(chi_phi_params)
     if @chi_phi.save
       ChiPhiView.refresh
-      #Pusher.trigger('chi_phi_channel', 'chi_phi_updated', {
-      #  message: 'hello world'
-      #})
+      Pusher.trigger('chi_phi_channel', 'chi_phi_updated', {
+        message: 'hello world'
+      })
       render json: @chi_phi.to_json
     else
       render json: @chi_phi.errors.to_json
