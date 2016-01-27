@@ -18,6 +18,9 @@ ChiPhiForm = React.createFactory React.createClass
       callback:
         onInit: (node)->
           console.log('Typeahead Initiated on ' + node.selector)
+        onClick: (node, a, item, event)=>
+          console.log item
+          @setState(tenhang: item.display)
     
     $.typeahead
       input: "#donvitinh"
@@ -27,6 +30,9 @@ ChiPhiForm = React.createFactory React.createClass
       callback:
         onInit: (node)->
           console.log('Typeahead Initiated on ' + node.selector)  
+        onClick: (node, a, item, event)=>
+          console.log item
+          @setState(donvitinh: item.display)
 
   resetState: ->
     @setState(tenhang: '', donvitinh: '', dongia: '', soluong: '')
@@ -58,8 +64,8 @@ ChiPhiForm = React.createFactory React.createClass
     @resetState()
   
   render: ->
-    form id: 'chi_phi_form', name: 'chi_phi_form',
-      div className: 'row',
+    div className: 'row',
+      div className: 'column',
         div className: 'typeahead-container',
           div className: 'typeahead-field',
             span className: 'typeahead-query',
@@ -73,11 +79,8 @@ ChiPhiForm = React.createFactory React.createClass
                 type: 'search',
                 name: 'tenhang',
                 autoComplete: 'off'
-            span className: 'typeahead-button',
-              button type: 'sumit',
-                i className: 'typeahead-search-icon'
-
-      div className: 'row',
+            
+      div className: 'column',
         div className: 'typeahead-container',
           div className: 'typeahead-field',
             span className: 'typeahead-query',
@@ -91,29 +94,25 @@ ChiPhiForm = React.createFactory React.createClass
                 type: 'search',
                 name: 'donvitinh',
                 autoComplete: 'off'
-            span className: 'typeahead-button',
-              button type: 'sumit',
-                i className: 'typeahead-search-icon'  
 
-      div className: 'row',
-        div className: 'column',
-          input 
-            type: 'text'
-            ref: 'soluong',
-            onChange: @onChangeSoLuong,
-            placeholder: 'Enter SL',
-            value: @state.so_luong
-        div className: 'column',
-          input 
-            type: 'text'
-            ref: 'dongia',
-            onChange: @onChangeDonGia,
-            placeholder: 'Enter DG',
-            value: @state.don_gia
-        button 
-          className: 'button',
-          onClick: @onSubmit,
-          'Add'
+      div className: 'column',
+        input 
+          type: 'text'
+          ref: 'soluong',
+          onChange: @onChangeSoLuong,
+          placeholder: 'Enter SL',
+          value: @state.soluong
+      div className: 'column',
+        input 
+          type: 'text'
+          ref: 'dongia',
+          onChange: @onChangeDonGia,
+          placeholder: 'Enter DG',
+          value: @state.dongia
+      button 
+        className: 'button',
+        onClick: @onSubmit,
+        'Add'
 
 
 ChiPhiList = React.createFactory React.createClass
