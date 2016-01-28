@@ -1,1 +1,1 @@
-<%= react_component('NhapIndex', render(template: 'nhaps/index.json.jbuilder')) %>
+<%= react_component('NhapIndex', {nhaps: @nhaps, options_tenhang: @options_tenhang, options_donvitinh: @options_donvitinh}, {prerender: true} )%>

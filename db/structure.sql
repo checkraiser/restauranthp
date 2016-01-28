@@ -136,12 +136,12 @@ CREATE MATERIALIZED VIEW chiphi_matview AS
 
 CREATE TABLE doanhthu (
     id integer NOT NULL,
-    masoban character varying(50) NOT NULL,
-    khoanmucthu character varying(100) NOT NULL,
+    masoban character varying(50),
+    khoanmucthu character varying(100),
     donvitinh character varying(50),
     dongia numeric(38,0),
     soluong integer,
-    create_at timestamp without time zone NOT NULL,
+    create_at timestamp without time zone,
     update_at timestamp without time zone
 );
 
@@ -256,14 +256,20 @@ CREATE TABLE schema_migrations (
 --
 
 CREATE MATERIALIZED VIEW tonghoptheongay_matview AS
- SELECT tiennhaptheongay.ngaynhap,
-    COALESCE(tiennhaptheongay.tiennhaptheongay, '0'::numeric) AS tiennhap,
-    tienchiphitheongay.ngaychiphi,
-    COALESCE(tienchiphitheongay.tienchiphitheongay, '0'::numeric) AS tienchiphi,
-    tienthutheongay.ngaythu,
-    COALESCE(tienthutheongay.tienthutheongay, '0'::numeric) AS doanhthu,
-    ((COALESCE(tienthutheongay.tienthutheongay, '0'::numeric) - COALESCE(tienchiphitheongay.tienchiphitheongay, '0'::numeric)) - COALESCE(tiennhaptheongay.tiennhaptheongay, '0'::numeric)) AS loinhuan
-   FROM ((( SELECT s.ngaynhap,
+ SELECT a.ngay,
+    COALESCE(b.tiennhaptheongay, '0'::numeric) AS tiennhap,
+    COALESCE(c.tienchiphitheongay, '0'::numeric) AS tienchiphi,
+    COALESCE(d.tienthutheongay, '0'::numeric) AS tienthutheongay,
+    ((COALESCE(d.tienthutheongay, '0'::numeric) - COALESCE(b.tiennhaptheongay, '0'::numeric)) - COALESCE(c.tienchiphitheongay, '0'::numeric)) AS loinhuan
+   FROM (((( SELECT DISTINCT date_trunc('day'::text, nhap.create_at) AS ngay
+           FROM nhap
+        UNION
+         SELECT DISTINCT date_trunc('day'::text, chiphi.create_at) AS ngay
+           FROM chiphi
+        UNION
+         SELECT DISTINCT date_trunc('day'::text, doanhthu.create_at) AS ngay
+           FROM doanhthu) a
+     LEFT JOIN ( SELECT s.ngaynhap,
             sum(s.thanhtien) AS tiennhaptheongay
            FROM ( SELECT nhap.id,
                     nhap.tenhang,
@@ -274,8 +280,8 @@ CREATE MATERIALIZED VIEW tonghoptheongay_matview AS
                     date_trunc('day'::text, nhap.create_at) AS ngaynhap,
                     nhap.update_at
                    FROM nhap) s
-          GROUP BY s.ngaynhap) tiennhaptheongay
-     FULL JOIN ( SELECT s.ngaychiphi,
+          GROUP BY s.ngaynhap) b ON ((a.ngay = b.ngaynhap)))
+     LEFT JOIN ( SELECT s.ngaychiphi,
             sum(s.thanhtien) AS tienchiphitheongay
            FROM ( SELECT chiphi.id,
                     chiphi.tenhang,
@@ -286,8 +292,8 @@ CREATE MATERIALIZED VIEW tonghoptheongay_matview AS
                     date_trunc('day'::text, chiphi.create_at) AS ngaychiphi,
                     chiphi.update_at
                    FROM chiphi) s
-          GROUP BY s.ngaychiphi) tienchiphitheongay ON ((tiennhaptheongay.ngaynhap = tienchiphitheongay.ngaychiphi)))
-     FULL JOIN ( SELECT s.ngaythu,
+          GROUP BY s.ngaychiphi) c ON ((a.ngay = c.ngaychiphi)))
+     LEFT JOIN ( SELECT s.ngaythu,
             sum(s.thanhtien) AS tienthutheongay
            FROM ( SELECT doanhthu.id,
                     doanhthu.masoban,
@@ -299,7 +305,8 @@ CREATE MATERIALIZED VIEW tonghoptheongay_matview AS
                     date_trunc('day'::text, doanhthu.create_at) AS ngaythu,
                     doanhthu.update_at
                    FROM doanhthu) s
-          GROUP BY s.ngaythu) tienthutheongay ON ((tiennhaptheongay.ngaynhap = tienthutheongay.ngaythu)))
+          GROUP BY s.ngaythu) d ON ((a.ngay = d.ngaythu)))
+  ORDER BY a.ngay
   WITH NO DATA;
 
 
@@ -337,7 +344,7 @@ ALTER TABLE ONLY chiphi
 --
 
 ALTER TABLE ONLY doanhthu
-    ADD CONSTRAINT doanhthu_pkey PRIMARY KEY (id, masoban, khoanmucthu, create_at);
+    ADD CONSTRAINT doanhthu_pkey PRIMARY KEY (id);
 
 
 --
@@ -370,10 +377,10 @@ CREATE UNIQUE INDEX index_nhap_matview_on_ngaynhap ON nhap_matview USING btree (
 
 
 --
--- Name: index_tonghoptheongay_matview_on_ngaynhap; Type: INDEX; Schema: public; Owner: -
+-- Name: index_tonghoptheongay_matview_on_ngay; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_tonghoptheongay_matview_on_ngaynhap ON tonghoptheongay_matview USING btree (ngaynhap);
+CREATE UNIQUE INDEX index_tonghoptheongay_matview_on_ngay ON tonghoptheongay_matview USING btree (ngay);
 
 
 --

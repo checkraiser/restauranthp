@@ -3,26 +3,18 @@ class NhapStore
   constructor: ->
     @bindActions(NhapActions)
     @nhaps = []
-    @options = []
+    @options_tenhang = []
+    @options_donvitinh = []
     @exportPublicMethods(
       {
         getNhaps: @getNhaps,
-        getOptions: @getOptions
       }
     )
     
   onInitData: (props)->
     @nhaps = props.nhaps
-    $.ajax
-      type: 'GET'
-      url: '/options?type=nhap'
-      dataType: 'json'
-      success: (response)=>
-        @options = response.options
-        @emitChange()
-      error: (response)=>
-        console.log('error')
-        console.log('response')
+    @options_tenhang = props.options_tenhang
+    @options_donvitinh = props.options_donvitinh
 
   onReloadData: ()->
     $.ajax
@@ -31,17 +23,8 @@ class NhapStore
       dataType: 'json'
       success: (response)=>
         @nhaps = response.nhaps
-        @emitChange()
-      error: (response)=>
-        console.log('error')
-        console.log('response')
-
-    $.ajax
-      type: 'GET'
-      url: '/options?type=nhap'
-      dataType: 'json'
-      success: (response)=>
-        @options = response.options
+        @options_tenhang = response.options_tenhang
+        @options_donvitinh = response.options_donvitinh
         @emitChange()
       error: (response)=>
         console.log('error')
@@ -53,6 +36,9 @@ class NhapStore
       url: '/nhaps'
       dataType: 'json'
       data: data
+      success: (response)=>
+        @nhaps.push(response)
+        @emitChange()
       error: (response)=>
         console.log('error')
         console.log(response)
@@ -60,8 +46,5 @@ class NhapStore
 
   getNhaps: ()->
     @getState().nhaps
-
-  getOptions: ()->
-    @getState().options
 
 window.NhapStore = alt.createStore(NhapStore)

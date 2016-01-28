@@ -1,50 +1,139 @@
-{ div, form, button, h1, ul, li, a, span, label, input, table, thead, tbody, tr, th, td } = React.DOM
+{ div, i, form, button, h1, ul, li, a, span, label, input, table, thead, tbody, tr, th, td } = React.DOM
 
-Typeahead = React.createFactory React.Typeahead
 
 NhapForm = React.createFactory React.createClass
   getInitialState: ->
-    loai_mat_hang: ''
-    so_luong: 0
-    don_gia: 0
+    tenhang: ''
+    donvitinh: ''
+    soluong: ''
+    dongia: ''
+
+  componentDidMount: ->    
+    @setTypeAheadTenhang()
+    @setTypeAheadDonViTinh()
+
+  setTypeAheadTenhang: ->
+    $.typeahead
+      input: "#tenhang"
+      minLength: 0
+      maxItem: 15
+      order: "asc"
+      hint: true
+      accent: true
+      searchOnFocus: true
+      backdrop: 
+        "background-color": "#3879d9",
+        "opacity": "0.1",
+        "filter": "alpha(opacity=10)"
+      source: 
+        data: @props.options_tenhang
+      debug: true
+      callback:
+        onInit: (node)->
+          console.log('Typeahead Initiated on ' + node.selector)
+        onClick: (node, a, item, event)=>
+          console.log item
+          @setState(tenhang: item.display)
+
+  setTypeAheadDonViTinh: ->
+    $.typeahead
+      input: "#donvitinh"
+      minLength: 0
+      maxItem: 15
+      order: "asc"
+      hint: true
+      accent: true
+      searchOnFocus: true
+      backdrop: 
+        "background-color": "#3879d9",
+        "opacity": "0.1",
+        "filter": "alpha(opacity=10)"
+      source: 
+        data: @props.options_donvitinh
+      callback:
+        onInit: (node)->
+          console.log('Typeahead Initiated on ' + node.selector)  
+        onClick: (node, a, item, event)=>
+          console.log item
+          @setState(donvitinh: item.display)
 
   resetState: ->
-    @setState(loai_mat_hang: '', so_luong: '', don_gia: '')
+    @setState(tenhang: '', donvitinh: '', dongia: '', soluong: '')
+    @setTypeAheadTenhang()
+    @setTypeAheadDonViTinh()
+
+  onChangeTenHang: (e)->
+    @setState(tenhang: e.target.value)
+
+  onChangeDonViTinh: (e)->
+    @setState(donvitinh: e.target.value)
 
   onChangeSoLuong: (e)->
-    @setState(so_luong: e.target.value)
+    @setState(soluong: e.target.value)
 
   onChangeDonGia: (e)->
-    @setState(don_gia: e.target.value)
+    @setState(dongia: e.target.value)
 
-  onSubmit: ()->
+  
+
+  onSubmit: (e)->
+    e.preventDefault()
     data =
       nhap: 
-        loai_mat_hang: this.refs.loai_mat_hang.state.entryValue
-        so_luong: this.refs.so_luong.value
-        don_gia: this.refs.don_gia.value
+        tenhang: this.refs.tenhang.value
+        donvitinh: this.refs.donvitinh.value
+        soluong: this.refs.soluong.value
+        dongia: this.refs.dongia.value
+        create_at: new Date()
     NhapActions.submitNhap data
     @resetState()
   
   render: ->
     div className: 'row',
       div className: 'column',
-        Typeahead(options: @props.options, maxVisible:2, ref: 'loai_mat_hang', placeholder: 'LMH')
-        
+        div className: 'typeahead-container',
+          div className: 'typeahead-field',
+            span className: 'typeahead-query',
+              input 
+                id: 'tenhang',
+                type: 'text',
+                ref: 'tenhang',
+                onChange: @onChangeTenHang,
+                placeholder: 'Khoản mục nhập',
+                value: @state.tenhang,
+                type: 'search',
+                name: 'tenhang',
+                autoComplete: 'off'
+            
+      div className: 'column',
+        div className: 'typeahead-container',
+          div className: 'typeahead-field',
+            span className: 'typeahead-query',
+              input 
+                id: 'donvitinh',
+                type: 'text',
+                ref: 'donvitinh',
+                onChange: @onChangeDonViTinh,
+                placeholder: 'Đơn vị tính',
+                value: @state.donvitinh,
+                type: 'search',
+                name: 'donvitinh',
+                autoComplete: 'off'
+
       div className: 'column',
         input 
           type: 'text'
-          ref: 'so_luong',
+          ref: 'soluong',
           onChange: @onChangeSoLuong,
-          placeholder: 'Enter SL',
-          value: @state.so_luong
+          placeholder: 'Số lượng',
+          value: @state.soluong
       div className: 'column',
         input 
           type: 'text'
-          ref: 'don_gia',
+          ref: 'dongia',
           onChange: @onChangeDonGia,
-          placeholder: 'Enter DG',
-          value: @state.don_gia
+          placeholder: 'Đơn giá',
+          value: @state.dongia
       button 
         className: 'button',
         onClick: @onSubmit,
@@ -57,37 +146,32 @@ NhapList = React.createFactory React.createClass
       thead {},
         tr {},
           th {}, 'STT'
-          th {}, 'LMH'
-          th {}, 'SL'
-          th {}, 'DG'
-          th {}, 'TT'
+          th {}, 'Khoản mục nhập'
+          th {}, 'Đơn vị tính'
+          th {}, 'Số lượng'
+          th {}, 'Đơn giá'
       tbody {},
         _.map @props.nhaps, (nhap)=>
           tr {key: nhap.id},
             td {}, nhap.id
-            td {}, nhap.loai_mat_hang
-            td {}, nhap.so_luong
-            td {}, nhap.don_gia
-            td {}, nhap.thanh_tien
+            td {}, nhap.tenhang
+            td {}, nhap.donvitinh
+            td {}, nhap.soluong
+            td {}, nhap.dongia
 
 window.NhapIndex = React.createClass
   getInitialState: ->
     nhaps: []
-    options: []
+    options_tenhang: []
+    options_donvitinh: []
 
   componentWillMount: ->
     NhapStore.listen(@onChange)
     NhapActions.initData(@props)
-    pusher = new Pusher('6c57eb75f33d0b498bed', {
-      encrypted: true
-    });
-    channel = pusher.subscribe('nhap_channel');
-    channel.bind 'nhap_updated', (data)->
-      NhapActions.reloadData()
 
   componentWillUnmount: ->
     NhapStore.unlisten(@onChange)
-
+  
   onChange: (state)->
     @setState(state)
 
@@ -95,8 +179,8 @@ window.NhapIndex = React.createClass
     div className: 'container',
       div className: 'row',
         div className: 'column',
-          h1 {}, 'Nhap'
-      NhapForm(options: @state.options)
+          h1 {}, 'Nhập'
+      NhapForm(options_tenhang: @state.options_tenhang, options_donvitinh: @state.options_donvitinh)
       div className: 'row',
         NhapList(nhaps: @state.nhaps)
 

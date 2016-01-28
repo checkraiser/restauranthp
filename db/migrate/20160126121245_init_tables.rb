@@ -87,15 +87,14 @@ class InitTables < ActiveRecord::Migration
       INSERT INTO Chiphi (Tenhang,Donvitinh,Dongia,Soluong,create_at) VALUES ('Gạo','Kg',15000,8,'2016-01-30');
       INSERT INTO Chiphi (Tenhang,Donvitinh,Dongia,Soluong,create_at) VALUES ('Ghế','Chiếc',150000,8,'2016-01-31');
       CREATE TABLE DoanhThu (
-        Id SERIAL NOT NULL , 
+        Id SERIAL NOT NULL PRIMARY KEY, 
         Masoban  Varchar(50),
         Khoanmucthu Varchar(100),
         Donvitinh Varchar(50), 
         Dongia Numeric(38, 0), 
         Soluong Integer, 
         create_at timestamp, 
-        update_at timestamp,
-        PRIMARY KEY (Id,Masoban,Khoanmucthu,create_at)
+        update_at timestamp
       );
       INSERT INTO DoanhThu (Masoban,Khoanmucthu,Donvitinh,Dongia,Soluong,create_at) VALUES ('Bàn 01','Bò sốt vang','Đĩa',100000,2,'2016-01-01');
       INSERT INTO DoanhThu (Masoban,Khoanmucthu,Donvitinh,Dongia,Soluong,create_at) VALUES ('Bàn 01','Xu hào xào','Đĩa',20000,1,'2016-01-02');
@@ -186,34 +185,42 @@ class InitTables < ActiveRecord::Migration
       $$
         LANGUAGE 'plpgsql' VOLATILE;
       CREATE MATERIALIZED VIEW tonghoptheongay_matview AS 
-      SELECT TienNhapTheoNgay.NgayNhap,COALESCE(TienNhapTheoNgay.TienNhapTheoNgay,'0') TienNhap,TienChiPhiTheoNgay.NgayChiPhi ,COALESCE(TienChiPhiTheoNgay.TienChiPhiTheoNgay,'0') TienChiPhi,TienThuTheoNgay.NgayThu,COALESCE(TienThuTheoNgay.TienThuTheoNgay,'0') DoanhThu, COALESCE(TienThuTheoNgay.TienThuTheoNgay,'0')- COALESCE(TienChiPhiTheoNgay.TienChiPhiTheoNgay,'0')-COALESCE(TienNhapTheoNgay.TienNhapTheoNgay,'0') AS LoiNhuan 
-      FROM (
-      SELECT S.ngaynhap,SUM(S.ThanhTien) AS TienNhapTheoNgay
-      FROM (
-      SELECT Id,Tenhang, Donvitinh,Dongia, Soluong, Soluong*Dongia AS ThanhTien,date_trunc('day',create_at) ngaynhap,update_at 
-      FROM nhap
-      ) AS S
-      GROUP BY S.ngaynhap
-      ) TienNhapTheoNgay
-      FULL JOIN 
-      (SELECT S.ngaychiphi,SUM(S.ThanhTien) AS TienChiPhiTheoNgay
-      FROM (
-      SELECT Id,Tenhang, Donvitinh,Dongia, Soluong, Soluong*Dongia AS ThanhTien,date_trunc('day',create_at) ngaychiphi,update_at 
-      FROM ChiPhi
-      ) AS S
-      GROUP BY S.ngaychiphi
-      ) TienChiPhiTheoNgay
-      ON TienNhapTheoNgay.NgayNhap=TienChiPhiTheoNgay.ngaychiphi
-      FULL JOIN 
+      SELECT A.ngay,COALESCE(B.TienNhapTheoNgay,'0') TienNhap,COALESCE(C.TienChiPhiTheoNgay,'0') TienChiPhi,COALESCE(D.TienThuTheoNgay,'0') TienThuTheoNgay,COALESCE(D.TienThuTheoNgay,'0')-COALESCE(B.TienNhapTheoNgay,'0')- COALESCE(C.TienChiPhiTheoNgay,'0') AS LoiNhuan 
+      FROM (Select distinct date_trunc('day',create_at) ngay
+      From nhap
+      UNION 
+      Select distinct date_trunc('day',create_at) ngay
+      From chiphi
+      UNION 
+      Select distinct date_trunc('day',create_at) ngay
+      From doanhthu
+      ) A
+      LEFT OUTER JOIN
       (
-      SELECT S.NgayThu,SUM(S.ThanhTien) AS TienThuTheoNgay
-      FROM (
-      SELECT Id,masoban,khoanmucthu,Donvitinh,Dongia, Soluong, Soluong*Dongia AS ThanhTien,date_trunc('day',create_at) NgayThu,update_at 
-      FROM doanhthu
-      ) AS S
-      GROUP BY S.NgayThu
-      ) TienThuTheoNgay
-      ON TienNhapTheoNgay.NgayNhap=TienThuTheoNgay.NgayThu;
+              SELECT S.ngaynhap,SUM(S.ThanhTien) AS TienNhapTheoNgay
+              FROM (
+              SELECT Id,Tenhang, Donvitinh,Dongia, Soluong, Soluong*Dongia AS ThanhTien,date_trunc('day',create_at) ngaynhap,update_at 
+              FROM nhap
+              ) AS S
+              GROUP BY S.ngaynhap
+      ) B ON A.ngay=B.ngaynhap
+      LEFT OUTER JOIN  
+      (        SELECT S.ngaychiphi,SUM(S.ThanhTien) AS TienChiPhiTheoNgay
+              FROM (
+              SELECT Id,Tenhang, Donvitinh,Dongia, Soluong, Soluong*Dongia AS ThanhTien,date_trunc('day',create_at) ngaychiphi,update_at 
+              FROM ChiPhi
+              ) AS S
+              GROUP BY S.ngaychiphi
+      ) C ON A.ngay=C.ngaychiphi
+      LEFT OUTER JOIN  
+      (        SELECT S.NgayThu,SUM(S.ThanhTien) AS TienThuTheoNgay
+              FROM (
+              SELECT Id,masoban,khoanmucthu,Donvitinh,Dongia, Soluong, Soluong*Dongia AS ThanhTien,date_trunc('day',create_at) NgayThu,update_at 
+              FROM doanhthu
+              ) AS S
+              GROUP BY S.NgayThu
+      ) D ON A.ngay=D.NgayThu
+      ORDER BY A.Ngay;
       REFRESH MATERIALIZED VIEW tonghoptheongay_matview;
   	SQL
   end

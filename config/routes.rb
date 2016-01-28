@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :chi_phis
   resources :nhaps
+  resources :doanh_thus
   resources :options, :only => :index
   get 'report' => 'home#report'
   root 'home#index'

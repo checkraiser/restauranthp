@@ -1,13 +1,26 @@
 class NhapsController < ApplicationController
   def index
-  	@nhaps = NhapView.all
+    @nhaps = Nhap.last(10)
+    @options_tenhang = Nhap.pluck(:tenhang).uniq
+    @options_donvitinh = Nhap.pluck(:donvitinh).uniq
+    respond_to do |format|
+      format.html do 
+        render :index
+      end
+      format.json do 
+        render json: {nhaps: @nhaps, options_tenhang: @options_tenhang, options_donvitinh: @options_donvitinh}
+      end
+    end
   end
 
   def create
     @nhap = Nhap.new(nhap_params)
     if @nhap.save
-      RefreshMatviewJob.new.async.perform('nhap')
-      render json: {success: 'OK'}
+      NhapView.refresh
+      Pusher.trigger('nhap_channel', 'nhap_updated', {
+        message: 'hello world'
+      })
+      render json: @nhap.to_json
     else
       render json: @nhap.errors.to_json
     end
@@ -15,8 +28,8 @@ class NhapsController < ApplicationController
 
   private
   def nhap_params
-  	params.require(:nhap).permit(
-  	   :loai_mat_hang, :so_luong, :don_gia
-  	)
+    params.require(:nhap).permit(
+       :tenhang, :donvitinh, :soluong, :dongia, :create_at
+    )
   end
 end
