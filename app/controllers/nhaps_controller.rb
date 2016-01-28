@@ -17,6 +17,7 @@ class NhapsController < ApplicationController
     @nhap = Nhap.new(nhap_params)
     if @nhap.save
       NhapView.refresh
+      TongHopView.refresh
       Pusher.trigger('restaurant_channel', 'nhap_updated', {
         message: 'hello world'
       })

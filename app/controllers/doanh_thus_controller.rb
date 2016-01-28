@@ -18,6 +18,7 @@ class DoanhThusController < ApplicationController
     @doanh_thu = DoanhThu.new(doanh_thu_params)
     if @doanh_thu.save
       DoanhThuView.refresh
+      TongHopView.refresh
       Pusher.trigger('restaurant_channel', 'doanh_thu_updated', {
         message: 'hello world'
       })

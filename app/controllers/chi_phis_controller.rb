@@ -17,6 +17,7 @@ class ChiPhisController < ApplicationController
     @chi_phi = ChiPhi.new(chi_phi_params)
     if @chi_phi.save
       ChiPhiView.refresh
+      TongHopView.refresh
       Pusher.trigger('restaurant_channel', 'chi_phi_updated', {
         message: 'hello world'
       })
