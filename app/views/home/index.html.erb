@@ -1,44 +1,40 @@
-<p>Date : </p>
- <input type="text" data-field="date" id='fromdate' readonly>
-  <div id="dtBox"></div>
-<div id="money"></div>
+<h1>Thống Kê</h1>
 <table>
 <thead>
 <tr>
-<th>Ngay</th>
-<th>Loi nhuan</th>
+<th>Ngày</th>
+<th>Chi phí nhập</th>
+<th>Chi phí khác</th>
+<th>Doanh thu</th>
+<th>Lợi nhuận</th>
 <th>
 </tr>
 </thead>
 <tbody>
 <% @tonghop.each do |t| %>
   <tr>
-  <td><%= t.ngay %></td>
+  <td><%= t.ngay.strftime("%d/%m/%Y") %></td>
+  <td><%= t.tiennhap %></td>
+  <td><%= t.tienchiphi %></td>
+  <td><%= t.tienthutheongay %></td>
   <td><%= t.loinhuan %></td>
   </tr>
 <% end %>
 </tbody>
 </table>
-<%= area_chart @loinhuan %>
+<%= line_chart @loinhuan %>
 <script type="text/javascript">
-  $(document).ready(function()
-   {
-     $("#dtBox").DateTimePicker({
-     	dateFormat: "yyyy-MM-dd"
-     });
-     var today = new Date();
-     var year = today.getFullYear();
-     var month = today.getMonth()+1;
-     var day = today.getDate();
-     $('#fromdate').val(year + '-' + month + '-' + day);
-     $('#todate').val(year + '-' + month + '-' + day);
-   });
-  
   var pusher = new Pusher('6c57eb75f33d0b498bed', {
 	  encrypted: true
 	});
-	var channel = pusher.subscribe('chi_phi_channel');
+	var channel = pusher.subscribe('restaurant_channel');
 	channel.bind('chi_phi_updated', function(data) {
-	  reset();
+	  location.reload();
 	});
+  channel.bind('doanh_thu_updated', function(data) {
+    location.reload();
+  });
+  channel.bind('nhap_updated', function(data) {
+    location.reload();
+  });
 </script>

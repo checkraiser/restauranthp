@@ -1,7 +1,7 @@
 class HomeController < ApplicationController
   def index
-    @loinhuan = TongHopView.pluck(:ngay, :loinhuan).group_by_day {|u| u[0]}
-    @tonghop = TongHopView.all
+    @loinhuan = TongHopView.pluck(:ngay, :loinhuan)
+    @tonghop = TongHopView.last(5)
   end
   def report
   	fromdate = (Date.strptime(params[:fromdate], '%Y-%m-%d') if params[:fromdate]) || Time.now

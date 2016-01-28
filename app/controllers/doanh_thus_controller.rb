@@ -18,7 +18,7 @@ class DoanhThusController < ApplicationController
     @doanh_thu = DoanhThu.new(doanh_thu_params)
     if @doanh_thu.save
       DoanhThuView.refresh
-      Pusher.trigger('DoanhThu_channel', 'DoanhThu_updated', {
+      Pusher.trigger('restaurant_channel', 'doanh_thu_updated', {
         message: 'hello world'
       })
       render json: @doanh_thu.to_json

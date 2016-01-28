@@ -17,7 +17,7 @@ class NhapsController < ApplicationController
     @nhap = Nhap.new(nhap_params)
     if @nhap.save
       NhapView.refresh
-      Pusher.trigger('nhap_channel', 'nhap_updated', {
+      Pusher.trigger('restaurant_channel', 'nhap_updated', {
         message: 'hello world'
       })
       render json: @nhap.to_json
