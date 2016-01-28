@@ -5,7 +5,7 @@ require 'rails/all'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
-
+require_relative "../lib/react/server_rendering/my_sprockets_renderer"
 module Restaurant
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -28,7 +28,7 @@ module Restaurant
     config.active_record.schema_format = :sql
     config.react.server_renderer_pool_size  ||= 1  # ExecJS doesn't allow more than one on MRI
     config.react.server_renderer_timeout    ||= 20 # seconds
-    config.react.server_renderer = React::ServerRendering::SprocketsRenderer
+    config.react.server_renderer = React::ServerRendering::MySprocketsRenderer
     config.react.server_renderer_options = {
       files: ["react-server.js", "components.js"], # files to load for prerendering
       replay_console: true,                 # if true, console.* will be replayed client-side

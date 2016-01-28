@@ -1,10 +1,25 @@
 <p>Date : </p>
  <input type="text" data-field="date" id='fromdate' readonly>
- <input type="text" data-field="date" id='todate' readonly>
   <div id="dtBox"></div>
 <div id="money"></div>
-
-<%= area_chart @chiphi_chart %>
+<table>
+<thead>
+<tr>
+<th>Ngaynhap</th>
+<th>TienNhap</th>
+<th>
+</tr>
+</thead>
+<tbody>
+<% @tonghop.each do |t| %>
+  <tr>
+  <td><%= t.ngaynhap %></td>
+  <td><%= t.tiennhap %></td>
+  </tr>
+<% end %>
+</tbody>
+</table>
+<%= area_chart @loinhuan %>
 <script type="text/javascript">
   $(document).ready(function()
    {
@@ -18,28 +33,7 @@
      $('#fromdate').val(year + '-' + month + '-' + day);
      $('#todate').val(year + '-' + month + '-' + day);
    });
-  var doanhthu = gon.doanhthu;
-  var chiphi = gon.chiphi;
-  var nhap = gon.nhap;
-  var tongtien = function(){
-  	return doanhthu - chiphi - nhap;
-  }
-  $('#money').html(tongtien());
-  var reset = function(){
-  	var fromdate = $('#fromdate').val();
-  	var todate = $('#todate').val();
-  	$.ajax({
-	  	url: '/report.json?fromdate=' + fromdate + '&todate=' + todate,
-	  	success: function(response){
-	  		doanhthu = response.doanhthu;
-	  		chiphi = response.chiphi;
-	  		nhap = response.nhap;
-	  		$('#money').html(tongtien());
-	  	}
-	  })
-  }
-  $('input[id=fromdate]').change(function() { reset() });
-  $('input[id=todate]').change(function() { reset() });
+  
   var pusher = new Pusher('6c57eb75f33d0b498bed', {
 	  encrypted: true
 	});

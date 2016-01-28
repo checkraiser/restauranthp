@@ -1,12 +1,17 @@
 class ChiPhisController < ApplicationController
   def index
     @chi_phis = ChiPhi.last(10)
+    @options_tenhang = ChiPhi.pluck(:tenhang).uniq
+    @options_donvitinh = ChiPhi.pluck(:donvitinh).uniq
+    gon.chi_phis = @chi_phis
+    gon.options_tenhang = @options_tenhang
+    gon.options_donvitinh = @options_donvitinh
     respond_to do |format|
       format.html do 
         render :index
       end
       format.json do 
-        render json: {chi_phis: @chi_phis}
+        render json: {chi_phis: @chi_phis, options_tenhang: @options_tenhang, options_donvitinh: @options_donvitinh}
       end
     end
   end

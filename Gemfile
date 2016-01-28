@@ -55,3 +55,4 @@ gem 'scenic'
 gem 'gon'
 gem "chartkick"
 gem 'groupdate'
+gem 'execjs'

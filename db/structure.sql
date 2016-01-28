@@ -36,11 +36,11 @@ SET search_path = public, pg_catalog;
 CREATE FUNCTION chiphi_usp(date1 date, date2 date) RETURNS TABLE(ngaychiphi timestamp without time zone, tienchiphitheongay numeric)
     LANGUAGE plpgsql
     AS $$
-			    BEGIN
-			    RETURN QUERY SELECT c.ngaychiphi,c.tienchiphitheongay
-			        FROM chiphi_matview  c WHERE c.ngaychiphi between date1 and date2;
-			END;
-			$$;
+          BEGIN
+          RETURN QUERY SELECT c.ngaychiphi,c.tienchiphitheongay
+              FROM chiphi_matview  c WHERE c.ngaychiphi between date1 and date2;
+      END;
+      $$;
 
 
 --
@@ -50,11 +50,11 @@ CREATE FUNCTION chiphi_usp(date1 date, date2 date) RETURNS TABLE(ngaychiphi time
 CREATE FUNCTION doanhthu_usp(date1 date, date2 date) RETURNS TABLE(ngaythu timestamp without time zone, tienthutheongay numeric)
     LANGUAGE plpgsql
     AS $$
-			    BEGIN
-			    RETURN QUERY SELECT c.ngaythu,c.tienthutheongay
-			        FROM doanhthu_matview  c WHERE c.ngaythu between date1 and date2;
-			END;
-			$$;
+          BEGIN
+          RETURN QUERY SELECT c.ngaythu,c.tienthutheongay
+              FROM doanhthu_matview  c WHERE c.ngaythu between date1 and date2;
+      END;
+      $$;
 
 
 --
@@ -64,49 +64,11 @@ CREATE FUNCTION doanhthu_usp(date1 date, date2 date) RETURNS TABLE(ngaythu times
 CREATE FUNCTION nhap_usp(date1 date, date2 date) RETURNS TABLE(ngaynhap timestamp without time zone, tiennhaptheongay numeric)
     LANGUAGE plpgsql
     AS $$
-			    BEGIN
-			    RETURN QUERY SELECT c.ngaynhap,c.tiennhaptheongay
-			        FROM nhap_matview  c WHERE c.ngaynhap between date1 and date2;
-			END;
-			$$;
-
-
---
--- Name: seed(); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION seed() RETURNS void
-    LANGUAGE plpgsql
-    AS $$
-		    BEGIN
-		        insert into Nhap (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Thịt bò','Kg',200000,10,now());
-				insert into Nhap (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Thịt lợn','Kg',120000,10,now());
-				insert into Nhap (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Thịt gà','Kg',150000,10,now());
-				insert into Nhap (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Hành','Kg',10000,5,now());
-				insert into Nhap (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Rau mùi','Kg',10000,5,now());
-				insert into Nhap (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Dầu ăn','Lít',200000,10,now());
-				insert into Nhap (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Xu hào','Kg',10000,10,now());
-				insert into Nhap (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Gạo','Kg',15000,10,now());
-				insert into Chiphi (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Thịt bò','Kg',200000,7,now());
-				insert into Chiphi (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Thịt lợn','Kg',120000,9,now());
-				insert into Chiphi (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Thịt gà','Kg',150000,10,now());
-				insert into Chiphi (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Hành','Kg',10000,5,now());
-				insert into Chiphi (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Rau mùi','Kg',10000,5,now());
-				insert into Chiphi (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Dầu ăn','Lít',200000,10,now());
-				insert into Chiphi (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Xu hào','Kg',10000,10,now());
-				insert into Chiphi (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Gạo','Kg',15000,8,now());
-				insert into Chiphi (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Ghế','Chiếc',150000,8,now());
-				insert into Chiphi (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Rượu Chivat21','Chai',600000,1,now());
-				insert into Chiphi (Tenhang,Donvitinh,Dongia,Soluong,create_at) values ('Rượu Whisky','Chai',700000,1,now());
-				insert into DoanhThu (Masoban,Khoanmucthu,Donvitinh,Dongia,Soluong,create_at) values ('Bàn 01','Bò sốt vang','Đĩa',100000,2,now());
-				insert into DoanhThu (Masoban,Khoanmucthu,Donvitinh,Dongia,Soluong,create_at) values ('Bàn 01','Xu hào xào','Đĩa',20000,1,now());
-				insert into DoanhThu (Masoban,Khoanmucthu,Donvitinh,Dongia,Soluong,create_at) values ('Bàn 01','Rượu Chivat21','Chai',1000000,1,now());
-				insert into DoanhThu (Masoban,Khoanmucthu,Donvitinh,Dongia,Soluong,create_at) values ('Bàn 02','Bò xào cần tỏi','Đĩa',100000,2,now());
-				insert into DoanhThu (Masoban,Khoanmucthu,Donvitinh,Dongia,Soluong,create_at) values ('Bàn 02','Đuôi bò hầm','Bát',200000,1,now());
-				insert into DoanhThu (Masoban,Khoanmucthu,Donvitinh,Dongia,Soluong,create_at) values ('Bàn 03','Rượu Whisky','Chai',1500000,1,now());
-				insert into DoanhThu (Masoban,Khoanmucthu,Donvitinh,Dongia,Soluong,create_at) values ('Bàn 04','Rượu Whisky','Chai',1500000,1,now());
-		    END;
-		$$;
+          BEGIN
+          RETURN QUERY SELECT c.ngaynhap,c.tiennhaptheongay
+              FROM nhap_matview  c WHERE c.ngaynhap between date1 and date2;
+      END;
+      $$;
 
 
 SET default_tablespace = '';
@@ -174,12 +136,12 @@ CREATE MATERIALIZED VIEW chiphi_matview AS
 
 CREATE TABLE doanhthu (
     id integer NOT NULL,
-    masoban character varying(50),
-    khoanmucthu character varying(100),
+    masoban character varying(50) NOT NULL,
+    khoanmucthu character varying(100) NOT NULL,
     donvitinh character varying(50),
     dongia numeric(38,0),
     soluong integer,
-    create_at timestamp without time zone,
+    create_at timestamp without time zone NOT NULL,
     update_at timestamp without time zone
 );
 
@@ -290,6 +252,58 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: tonghoptheongay_matview; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW tonghoptheongay_matview AS
+ SELECT tiennhaptheongay.ngaynhap,
+    COALESCE(tiennhaptheongay.tiennhaptheongay, '0'::numeric) AS tiennhap,
+    tienchiphitheongay.ngaychiphi,
+    COALESCE(tienchiphitheongay.tienchiphitheongay, '0'::numeric) AS tienchiphi,
+    tienthutheongay.ngaythu,
+    COALESCE(tienthutheongay.tienthutheongay, '0'::numeric) AS doanhthu,
+    ((COALESCE(tienthutheongay.tienthutheongay, '0'::numeric) - COALESCE(tienchiphitheongay.tienchiphitheongay, '0'::numeric)) - COALESCE(tiennhaptheongay.tiennhaptheongay, '0'::numeric)) AS loinhuan
+   FROM ((( SELECT s.ngaynhap,
+            sum(s.thanhtien) AS tiennhaptheongay
+           FROM ( SELECT nhap.id,
+                    nhap.tenhang,
+                    nhap.donvitinh,
+                    nhap.dongia,
+                    nhap.soluong,
+                    ((nhap.soluong)::numeric * nhap.dongia) AS thanhtien,
+                    date_trunc('day'::text, nhap.create_at) AS ngaynhap,
+                    nhap.update_at
+                   FROM nhap) s
+          GROUP BY s.ngaynhap) tiennhaptheongay
+     FULL JOIN ( SELECT s.ngaychiphi,
+            sum(s.thanhtien) AS tienchiphitheongay
+           FROM ( SELECT chiphi.id,
+                    chiphi.tenhang,
+                    chiphi.donvitinh,
+                    chiphi.dongia,
+                    chiphi.soluong,
+                    ((chiphi.soluong)::numeric * chiphi.dongia) AS thanhtien,
+                    date_trunc('day'::text, chiphi.create_at) AS ngaychiphi,
+                    chiphi.update_at
+                   FROM chiphi) s
+          GROUP BY s.ngaychiphi) tienchiphitheongay ON ((tiennhaptheongay.ngaynhap = tienchiphitheongay.ngaychiphi)))
+     FULL JOIN ( SELECT s.ngaythu,
+            sum(s.thanhtien) AS tienthutheongay
+           FROM ( SELECT doanhthu.id,
+                    doanhthu.masoban,
+                    doanhthu.khoanmucthu,
+                    doanhthu.donvitinh,
+                    doanhthu.dongia,
+                    doanhthu.soluong,
+                    ((doanhthu.soluong)::numeric * doanhthu.dongia) AS thanhtien,
+                    date_trunc('day'::text, doanhthu.create_at) AS ngaythu,
+                    doanhthu.update_at
+                   FROM doanhthu) s
+          GROUP BY s.ngaythu) tienthutheongay ON ((tiennhaptheongay.ngaynhap = tienthutheongay.ngaythu)))
+  WITH NO DATA;
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -323,7 +337,7 @@ ALTER TABLE ONLY chiphi
 --
 
 ALTER TABLE ONLY doanhthu
-    ADD CONSTRAINT doanhthu_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT doanhthu_pkey PRIMARY KEY (id, masoban, khoanmucthu, create_at);
 
 
 --
@@ -356,6 +370,13 @@ CREATE UNIQUE INDEX index_nhap_matview_on_ngaynhap ON nhap_matview USING btree (
 
 
 --
+-- Name: index_tonghoptheongay_matview_on_ngaynhap; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_tonghoptheongay_matview_on_ngaynhap ON tonghoptheongay_matview USING btree (ngaynhap);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -369,12 +390,6 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 SET search_path TO "$user", public;
 
 INSERT INTO schema_migrations (version) VALUES ('20160126121245');
-
-INSERT INTO schema_migrations (version) VALUES ('20160126121521');
-
-INSERT INTO schema_migrations (version) VALUES ('20160126124105');
-
-INSERT INTO schema_migrations (version) VALUES ('20160126130114');
 
 INSERT INTO schema_migrations (version) VALUES ('20160126150032');
 
