@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   def index
-    @loinhuan = TongHopView.pluck(:ngaynhap, :loinhuan).group_by_day {|u| u[0]}
+    @loinhuan = TongHopView.pluck(:ngay, :loinhuan).group_by_day {|u| u[0]}
     @tonghop = TongHopView.all
   end
   def report
