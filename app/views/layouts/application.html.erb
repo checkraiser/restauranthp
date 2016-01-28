@@ -9,8 +9,30 @@
   <%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
 </head>
 <body>
-
+<nav class="navigation">
+	<section class="container">
+		<a class="navigation-title" href="/">
+			<img class="img" src="https://milligram.github.io/img/logo.svg" height="30" alt="RestaurantHP" title="RestaurantHP">
+			<h1 class="title">RestaurantHP</h1>
+		</a>
+		<a class="navigation-title" href="/doanh_thus">
+			<h1 class="title">Doanh thu</h1>
+		</a>
+		<a class="navigation-title" href="/nhaps">
+			<h1 class="title">Nhập nguyên liệu</h1>
+		</a>
+		<a class="navigation-title" href="/chi_phis">
+			<h1 class="title">Chi phí</h1>
+		</a>	
+	</section>
+</nav>
+<section class="container" style="margin-top:60px;">
  <%= yield %>
-
+</section>
+<footer class="footer">
+<section class="container">
+Phần mềm quản lý nhà hàng 2015
+</section>
+</footer>
 </body>
 </html>
